@@ -12,6 +12,7 @@ struct VolumeControlsView: View {
 
     @State private var draftVolume = 0.0
     @State private var isAdjusting = false
+    @State var isOutputExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -49,7 +50,8 @@ struct VolumeControlsView: View {
                 settings: settings,
                 devices: volume.outputDevices,
                 onSelect: onSelectOutputDevice,
-                onOpenSoundSettings: onOpenSoundSettings
+                onOpenSoundSettings: onOpenSoundSettings,
+                isExpanded: $isOutputExpanded
             )
         }
         .onAppear(perform: synchronizeVolume)
