@@ -229,3 +229,8 @@
 "settings.audio.indicatorStyleDescription" = "Escolha se o volume é exibido como quatro pontos ou um arco contínuo.";
 "settings.audio.indicatorStyle.dots" = "Pontos";
 "settings.audio.indicatorStyle.arc" = "Arco";
+
+// Current Wi-Fi radio measurements, not Internet speed.
+"wifi.summary.band" = "%@ GHz";
+"wifi.summary.signal" = "%d dBm";
+"wifi.summary.bandAndSignal" = "%@ · %@";

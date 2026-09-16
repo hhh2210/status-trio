@@ -229,3 +229,8 @@
 "settings.audio.indicatorStyleDescription" = "ステータスリング下部に4つのドットまたは連続する円弧バーのいずれで表示するかを選択します。";
 "settings.audio.indicatorStyle.dots" = "4つのドット";
 "settings.audio.indicatorStyle.arc" = "円弧バー";
+
+// Current Wi-Fi radio measurements, not Internet speed.
+"wifi.summary.band" = "%@ GHz";
+"wifi.summary.signal" = "%d dBm";
+"wifi.summary.bandAndSignal" = "%@ · %@";

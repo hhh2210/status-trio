@@ -229,3 +229,8 @@
 "settings.audio.indicatorStyleDescription" = "اختر ما إذا كان مستوى الصوت يظهر كأربع نقاط أو كقوس متصل.";
 "settings.audio.indicatorStyle.dots" = "نقاط";
 "settings.audio.indicatorStyle.arc" = "قوس";
+
+// Current Wi-Fi radio measurements, not Internet speed.
+"wifi.summary.band" = "%@ GHz";
+"wifi.summary.signal" = "%d dBm";
+"wifi.summary.bandAndSignal" = "%@ · %@";

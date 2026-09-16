@@ -78,6 +78,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         scheduleInitialRender()
 
         cancellable = store.$snapshot
+            .map { MenuBarStatus(snapshot: $0) }
             .removeDuplicates()
             .dropFirst()
             .debounce(

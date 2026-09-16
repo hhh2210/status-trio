@@ -4,6 +4,7 @@ import SwiftUI
 struct WiFiStatusView: View {
     @EnvironmentObject private var localization: Localization
     let wifi: WiFiStatus
+    var connection: NetworkConnection = .wifi
     let onOpenDetails: (Bool) -> Void
     let onRequestNameAccess: () -> Void
     let onOpenWiFiSettings: () -> Void
@@ -24,8 +25,10 @@ struct WiFiStatusView: View {
                 HStack(spacing: 10) {
                     WiFiStatusIcon(wifi: wifi)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(localization.string(.networkTitle))
+                        Text(summarySSID ?? localization.string(.networkTitle))
                             .font(.headline)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
                         subtitle
                     }
                     Spacer()
@@ -37,6 +40,7 @@ struct WiFiStatusView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(wifiAccessibilityLabel)
+            .accessibilityValue(WiFiSummaryPresentation.measurements(wifi, connection: connection, localization: localization) ?? "")
 
             Button(
                 localization.string(.wifiActionOpenSettings),
@@ -53,7 +57,12 @@ struct WiFiStatusView: View {
 
     @ViewBuilder
     private var subtitle: some View {
-        if let ssid = wifi.ssid, !ssid.isEmpty {
+        if summarySSID != nil {
+            Text(WiFiSummaryPresentation.measurements(wifi, connection: connection, localization: localization)
+                 ?? localization.string(wifi.state == .hotspot ? .wifiSubtitleHotspot : .wifiSubtitleConnected))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else if let ssid = wifi.ssid, !ssid.isEmpty {
             Text(ssid)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -79,6 +88,13 @@ struct WiFiStatusView: View {
                 .lineLimit(1)
                 .truncationMode(.middle)
         }
+    }
+
+    private var summarySSID: String? {
+        guard connection != .ethernet,
+              wifi.state == .connected || wifi.state == .hotspot,
+              let ssid = wifi.ssid, !ssid.isEmpty else { return nil }
+        return ssid
     }
 
     private var wifiAccessibilityLabel: String {
