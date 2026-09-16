@@ -229,3 +229,16 @@
 "settings.audio.indicatorStyleDescription" = "ステータスリング下部に4つのドットまたは連続する円弧バーのいずれで表示するかを選択します。";
 "settings.audio.indicatorStyle.dots" = "4つのドット";
 "settings.audio.indicatorStyle.arc" = "円弧バー";
+
+// Optional icon introduction.
+"guide.title" = "アイコンの見方";
+"guide.expanded" = "展開済み";
+"guide.collapsed" = "折りたたみ済み";
+"guide.dismiss" = "ガイドを閉じる";
+"guide.customize" = "カスタマイズ…";
+"guide.done" = "完了";
+"guide.example" = "現在のアイコン設定を使った例です。各部分を選んで説明を確認できます。";
+"guide.battery" = "外側のバッテリーの弧は充電残量を示します。パーセント表示と充電記号は設定で変更できます。";
+"guide.network" = "中央はネットワークの状態を示します。接続の種類や設定によって記号が変わります。";
+"guide.volumeDots" = "下の点は携帯電話の電波ではなく音量です。塗られた点が多いほど音が大きくなります。オーディオ設定で表示を変更できます。";
+"guide.volumeArc" = "下の弧は携帯電話の電波ではなく音量です。弧が長いほど音が大きくなります。オーディオ設定で表示を変更できます。";

@@ -24,6 +24,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
 
     private let statusItem: NSStatusItem
     private let popover = NSPopover()
+    private let iconGuide = IconGuidePresentation()
     private let store: SystemStatusStore
     private let settings: SettingsStore
     private let localization: Localization
@@ -264,6 +265,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             StatusPopoverView(
                 store: store,
                 settings: settings,
+                iconGuide: iconGuide,
                 requestWiFiNameAccess: handleRequestWiFiNameAccess,
                 requestBluetoothAuthorization: handleRequestBluetoothAuthorization,
                 openBatterySettings: handleOpenBatterySettings,
@@ -318,6 +320,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         cancelPopoverContentRelease()
         popoverContentRetention.markOpened()
         store.setPopoverVisible(true)
+        iconGuide.presentIfNeeded(settings: settings)
         installPopoverContentIfNeeded()
         // Activate first: a transient popover shown while the app is still
         // inactive can be dismissed again straight away.
@@ -461,6 +464,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     }
 
     func popoverDidClose(_ notification: Notification) {
+        iconGuide.dismiss()
         removePopoverDismissMonitor()
         removeVolumeScrollMonitor()
         store.setPopoverVisible(false)

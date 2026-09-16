@@ -14,6 +14,11 @@ struct MenuBarSectionView: View {
             // 1. Ultra-Clear Live Menu Bar Preview
             livePreviewStage
 
+            DisclosureGroup(localization.string(.guideTitle)) {
+                IconGuideView(settings: store)
+                    .padding(.top, 8)
+            }
+
             // 2. Icon Sizing
             iconSizeGroup
 

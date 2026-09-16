@@ -229,3 +229,16 @@
 "settings.audio.indicatorStyleDescription" = "Escolha se o volume é exibido como quatro pontos ou um arco contínuo.";
 "settings.audio.indicatorStyle.dots" = "Pontos";
 "settings.audio.indicatorStyle.arc" = "Arco";
+
+// Optional icon introduction.
+"guide.title" = "Conheça seu ícone";
+"guide.expanded" = "Expandido";
+"guide.collapsed" = "Recolhido";
+"guide.dismiss" = "Fechar guia";
+"guide.customize" = "Personalizar…";
+"guide.done" = "Concluído";
+"guide.example" = "Exemplo com seus ajustes de ícone. Selecione uma parte.";
+"guide.battery" = "O arco externo da bateria mostra a carga. A porcentagem e os símbolos de carga podem ser alterados nos Ajustes.";
+"guide.network" = "O centro mostra o estado da rede. O símbolo pode mudar conforme a conexão e seus ajustes.";
+"guide.volumeDots" = "Os pontos inferiores mostram o volume, não o sinal celular. Mais pontos preenchidos indicam som mais alto. Altere o estilo nos ajustes de áudio.";
+"guide.volumeArc" = "O arco inferior mostra o volume, não o sinal celular. Um arco mais longo indica som mais alto. Altere o estilo nos ajustes de áudio.";

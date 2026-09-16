@@ -252,6 +252,7 @@ private enum PopoverPanel {
 struct StatusPopoverView: View {
     @ObservedObject var store: SystemStatusStore
     @ObservedObject var settings: SettingsStore
+    @ObservedObject var iconGuide: IconGuidePresentation
     @EnvironmentObject private var localization: Localization
     let requestWiFiNameAccess: () -> Void
     let requestBluetoothAuthorization: () -> Void
@@ -297,6 +298,14 @@ struct StatusPopoverView: View {
 
     private var summary: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if iconGuide.isPresented {
+                FirstUseIconGuide(
+                    settings: settings,
+                    onCustomize: openSettings,
+                    onDismiss: { iconGuide.dismiss() }
+                )
+            }
+
             ForEach(settings.visiblePopupSections) { section in
                 popupSection(section)
 

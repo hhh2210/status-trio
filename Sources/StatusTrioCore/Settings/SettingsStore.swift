@@ -3,6 +3,14 @@ import Foundation
 
 @MainActor
 final class SettingsStore: ObservableObject {
+    static let hasSeenIconGuideDefaultsKey = "hasSeenIconGuide"
+
+    @Published var hasSeenIconGuide: Bool {
+        didSet {
+            defaults.set(hasSeenIconGuide, forKey: Self.hasSeenIconGuideDefaultsKey)
+        }
+    }
+
     static let iconSizeRange: ClosedRange<Double> = 16...36
     static let defaultIconSize: Double = 28
     static let iconSizeDefaultsKey = "menuBarIconSize"
@@ -333,6 +341,7 @@ final class SettingsStore: ObservableObject {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
+        self.hasSeenIconGuide = defaults.bool(forKey: Self.hasSeenIconGuideDefaultsKey)
         let storedIconSize = (defaults.object(forKey: Self.iconSizeDefaultsKey) as? NSNumber)?.doubleValue
         let storedCriticalThreshold = (defaults.object(forKey: Self.batteryCriticalThresholdDefaultsKey) as? NSNumber)?.doubleValue
         let storedBatterySymbolScale = (defaults.object(forKey: Self.batterySymbolScaleDefaultsKey) as? NSNumber)?.doubleValue
