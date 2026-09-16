@@ -91,10 +91,7 @@ struct WiFiStatusView: View {
     }
 
     private var summarySSID: String? {
-        guard connection != .ethernet,
-              wifi.state == .connected || wifi.state == .hotspot,
-              let ssid = wifi.ssid, !ssid.isEmpty else { return nil }
-        return ssid
+        WiFiSummaryPresentation.summarySSID(wifi, connection: connection)
     }
 
     private var wifiAccessibilityLabel: String {

@@ -18,8 +18,12 @@ reader. Neither measurement is Internet speed or a test of Internet reachability
 
 Closing details, a disconnected/off state, or a failed fresh reading drops the
 frequency band. The existing short-lived RSSI/status fallback is unchanged.
-Measurements are suppressed for Ethernet and non-connected Wi-Fi states, so
-stale radio details are not presented as the active Ethernet connection's data.
+The enhanced title and measurements require the primary path to be Wi-Fi,
+a connected/hotspot radio, and a nonempty SSID. They are suppressed while the
+primary path is Ethernet, offline, other, or unknown. VoiceOver shares the same
+visibility gate, so permission prompts never announce visually hidden measurements.
+A hotspot using a Wi-Fi primary path remains eligible. The existing technical
+panel can still expose radio details separately from this primary-path summary.
 
 The optional band is omitted from `MenuBarStatus`. Both icon subscriptions project
 to this lightweight status before deduplication, and neither menu-bar nor Dock

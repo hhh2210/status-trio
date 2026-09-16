@@ -964,6 +964,22 @@ final class WiFiClassifierTests: XCTestCase {
         )
     }
 
+    func testSystemReaderBandPropagatesAndClearsWithDetailsVisibility() async {
+        let reader = FakeWiFiSystemReader(result: makeReading(band: .fiveGHz))
+        let monitor = makeMonitor(reader: reader)
+        var iterator = monitor.updates.makeAsyncIterator()
+        monitor.start()
+        let visible = await iterator.next()
+        XCTAssertEqual(reader.lastIncludeSSID, true)
+        XCTAssertEqual(visible?.band, .fiveGHz)
+
+        monitor.setDetailsVisible(false)
+        let hidden = await iterator.next()
+        XCTAssertEqual(reader.lastIncludeSSID, false)
+        XCTAssertNil(hidden?.band)
+        monitor.stop()
+    }
+
     func testFrequencyBandIsOnlyPublishedWhileDetailsAreVisible() async {
         let reader = DeferredWiFiStatusReader()
         let monitor = makeMonitor(statusReader: reader)
@@ -1135,7 +1151,8 @@ private final class FakeWiFiSystemReader: WiFiSystemReadingProviding {
             serviceActive: result.serviceActive,
             mode: result.mode,
             rssi: result.rssi,
-            ssid: includeSSID ? result.ssid : nil
+            ssid: includeSSID ? result.ssid : nil,
+            band: includeSSID ? result.band : nil
         )
     }
 }
