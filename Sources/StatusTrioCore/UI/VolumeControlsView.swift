@@ -15,30 +15,7 @@ struct VolumeControlsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
-                Image(systemName: "speaker.wave.2.fill")
-                    .frame(width: 24)
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
-
-                Text(StatusPresentation.volumeTitle(volume, localization: localization))
-                    .font(.headline.weight(.semibold))
-                    .monospacedDigit()
-
-                Spacer()
-
-                Button(
-                    localization.string(.volumeActionOpenSettings),
-                    systemImage: "gearshape",
-                    action: onOpenSoundSettings
-                )
-                .labelStyle(.iconOnly)
-                .buttonStyle(.plain)
-                .foregroundStyle(.secondary)
-                .help(localization.string(.volumeActionOpenSettings))
-                .accessibilityLabel(localization.string(.volumeActionOpenSettings))
-                .frame(width: 24, height: 24)
-            }
+            VolumeOutputSummaryView(volume: volume)
 
             HStack(spacing: 10) {
                 Button(
@@ -51,7 +28,7 @@ struct VolumeControlsView: View {
                 .foregroundStyle(volume.isMuted ? Color.red : Color.secondary)
                 .help(volume.isMuted ? localization.string(.volumeUnmuted) : localization.string(.volumeMuted))
                 .disabled(!isEnabled)
-                .frame(width: 24)
+                .frame(width: 24, height: 24)
 
                 Slider(
                     value: $draftVolume,
@@ -68,22 +45,11 @@ struct VolumeControlsView: View {
                     .accessibilityHidden(true)
             }
 
-            Divider()
-
-            HStack(spacing: 10) {
-                Image(systemName: "hifispeaker.fill")
-                    .frame(width: 24)
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
-
-                Text(localization.string(.volumeOutputTitle))
-                    .font(.headline.weight(.semibold))
-            }
-
-            OutputDeviceList(
+            AudioOutputPickerView(
                 settings: settings,
                 devices: volume.outputDevices,
-                onSelect: onSelectOutputDevice
+                onSelect: onSelectOutputDevice,
+                onOpenSoundSettings: onOpenSoundSettings
             )
         }
         .onAppear(perform: synchronizeVolume)
@@ -98,7 +64,10 @@ struct VolumeControlsView: View {
 
     private var percentageText: String {
         guard draftVolume.isFinite else { return "—" }
-        return "\(Int((min(1, max(0, draftVolume)) * 100).rounded()))%"
+        return min(1, max(0, draftVolume)).formatted(
+            .percent.precision(.fractionLength(0))
+                .locale(localization.resolvedLanguage.locale)
+        )
     }
 
     private func handleVolumeEditing(_ isEditing: Bool) {
