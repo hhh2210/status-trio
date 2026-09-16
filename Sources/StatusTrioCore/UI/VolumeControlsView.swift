@@ -12,7 +12,27 @@ struct VolumeControlsView: View {
 
     @State private var draftVolume = 0.0
     @State private var isAdjusting = false
-    @State var isOutputExpanded = false
+    @State private var isOutputExpanded: Bool
+
+    init(
+        settings: SettingsStore,
+        volume: VolumeStatus,
+        isEnabled: Bool,
+        onVolumeChange: @escaping (Double) -> Void,
+        onToggleMute: @escaping () -> Void,
+        onSelectOutputDevice: @escaping (AudioOutputDevice) -> Void,
+        onOpenSoundSettings: @escaping () -> Void,
+        initiallyExpandsOutput: Bool = false
+    ) {
+        self.settings = settings
+        self.volume = volume
+        self.isEnabled = isEnabled
+        self.onVolumeChange = onVolumeChange
+        self.onToggleMute = onToggleMute
+        self.onSelectOutputDevice = onSelectOutputDevice
+        self.onOpenSoundSettings = onOpenSoundSettings
+        _isOutputExpanded = State(initialValue: initiallyExpandsOutput)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
