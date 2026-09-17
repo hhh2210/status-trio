@@ -17,6 +17,7 @@ final class SettingsRowHitAreaTests: XCTestCase {
             store: store,
             settings: settings,
             iconGuide: IconGuidePresentation(),
+            scrollTargets: PopoverScrollTargets(),
             requestWiFiNameAccess: {},
             requestBluetoothAuthorization: {},
             openBatterySettings: {},

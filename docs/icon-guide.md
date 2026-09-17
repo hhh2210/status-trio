@@ -9,7 +9,7 @@ icon options, not a separately drawn imitation or live measurements.
 
 Dismissal, completing the guide, opening Settings, or closing the popover hides
 the invitation. A persisted seen bit prevents repeated invitations, including
-when the controller reuses its hosting view for 60 seconds. Settings → Menu Bar
+when the controller reuses its hosting view for 60 seconds. Settings → App Icon
 always offers the guide again in a disclosure group. The first-use Customize
 action opens the existing Settings window; Audio settings own volume style.
 

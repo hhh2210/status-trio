@@ -12,8 +12,15 @@ struct FirstUseIconGuide: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Button(localization.string(.guideTitle)) {
+                Button {
                     isExpanded.toggle()
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .accessibilityHidden(true)
+                        Text(localization.string(.guideTitle))
+                    }
                 }
                 .accessibilityValue(localization.string(isExpanded ? .guideExpanded : .guideCollapsed))
                 Spacer(minLength: 4)
@@ -49,7 +56,7 @@ enum IconGuidePart: CaseIterable, Identifiable {
     var titleKey: LocalizationKey {
         switch self {
         case .battery: .settingsPopupOrderBattery
-        case .network: .networkTitle
+        case .network: .wifiTitle
         case .volume: .settingsPopupOrderVolume
         }
     }

@@ -253,6 +253,7 @@ struct StatusPopoverView: View {
     @ObservedObject var store: SystemStatusStore
     @ObservedObject var settings: SettingsStore
     @ObservedObject var iconGuide: IconGuidePresentation
+    let scrollTargets: PopoverScrollTargets
     @EnvironmentObject private var localization: Localization
     let requestWiFiNameAccess: () -> Void
     let requestBluetoothAuthorization: () -> Void
@@ -351,6 +352,7 @@ struct StatusPopoverView: View {
         case .network:
             WiFiStatusView(
                 wifi: store.popupSnapshot.wifi,
+                isResolvingName: store.isResolvingWiFiName,
                 onOpenDetails: { showDetails in
                     store.activateWiFiPanel()
                     panel = .wifi(showDetails: showDetails)
@@ -372,6 +374,7 @@ struct StatusPopoverView: View {
         case .volume:
             VolumeControlsView(
                 settings: settings,
+                scrollTargets: scrollTargets,
                 volume: store.liveVolume,
                 isEnabled: store.isVolumeControlAvailable,
                 onVolumeChange: store.setVolume,
