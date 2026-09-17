@@ -26,7 +26,7 @@ final class CompactAudioLayoutTests: XCTestCase {
         }
     }
 
-    func testSummaryNameFallbackAndCachedIconConsistency() {
+    func testSummaryNameUsesLiveValueThenFallsBackToCurrentDevice() {
         let named = AudioOutputDevice(id: 1, name: "Studio AirPods Pro", isCurrent: true)
         let unnamed = AudioOutputDevice(id: 1, name: nil, isCurrent: true)
         func summary(_ liveName: String?, _ devices: [AudioOutputDevice]) -> VolumeOutputSummaryView {
@@ -35,9 +35,7 @@ final class CompactAudioLayoutTests: XCTestCase {
         XCTAssertEqual(summary(nil, [named]).displayDeviceName, named.name)
         XCTAssertEqual(summary("Live output", []).displayDeviceName, "Live output")
         XCTAssertEqual(summary("Live output", [unnamed]).displayDeviceName, "Live output")
-        XCTAssertEqual(summary(named.name, [named]).iconDevice, named)
         XCTAssertEqual(summary("New live output", [named]).displayDeviceName, "New live output")
-        XCTAssertNil(summary("New live output", [named]).iconDevice, "Do not label a new output with the cached previous device's icon")
         XCTAssertNil(summary(nil, []).displayDeviceName)
     }
 
@@ -56,6 +54,7 @@ final class CompactAudioLayoutTests: XCTestCase {
         let view = VStack(alignment: .leading, spacing: 12) {
             VolumeControlsView(
                 settings: settings,
+                scrollTargets: PopoverScrollTargets(),
                 volume: VolumeStatus(scalar: 0.19, isMuted: false, deviceName: devices[0].name, outputDevices: devices),
                 isEnabled: true,
                 onVolumeChange: { _ in }, onToggleMute: {}, onSelectOutputDevice: { _ in }, onOpenSoundSettings: {},

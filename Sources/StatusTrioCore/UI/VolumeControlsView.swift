@@ -3,6 +3,7 @@ import SwiftUI
 struct VolumeControlsView: View {
     @EnvironmentObject private var localization: Localization
     @ObservedObject var settings: SettingsStore
+    let scrollTargets: PopoverScrollTargets
     let volume: VolumeStatus
     let isEnabled: Bool
     let onVolumeChange: (Double) -> Void
@@ -16,6 +17,7 @@ struct VolumeControlsView: View {
 
     init(
         settings: SettingsStore,
+        scrollTargets: PopoverScrollTargets,
         volume: VolumeStatus,
         isEnabled: Bool,
         onVolumeChange: @escaping (Double) -> Void,
@@ -25,6 +27,7 @@ struct VolumeControlsView: View {
         initiallyExpandsOutput: Bool = false
     ) {
         self.settings = settings
+        self.scrollTargets = scrollTargets
         self.volume = volume
         self.isEnabled = isEnabled
         self.onVolumeChange = onVolumeChange
@@ -35,44 +38,40 @@ struct VolumeControlsView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            VolumeOutputSummaryView(volume: volume)
-
-            HStack(spacing: 10) {
-                Button(
-                    volume.isMuted ? localization.string(.volumeUnmuted) : localization.string(.volumeMuted),
-                    systemImage: volume.isMuted ? "speaker.slash.fill" : "speaker.fill",
-                    action: onToggleMute
-                )
-                .labelStyle(.iconOnly)
-                .buttonStyle(.plain)
-                .foregroundStyle(volume.isMuted ? Color.red : Color.secondary)
-                .help(volume.isMuted ? localization.string(.volumeUnmuted) : localization.string(.volumeMuted))
-                .disabled(!isEnabled)
-                .frame(width: 24, height: 24)
-
-                Slider(
-                    value: $draftVolume,
-                    in: 0...1,
-                    onEditingChanged: handleVolumeEditing
-                )
-                .tint(volume.isMuted ? Color.secondary : Color.accentColor)
-                .disabled(!isEnabled)
-                .accessibilityLabel(localization.string(.volumeAccessibilityLabel))
-                .accessibilityValue(percentageText)
-
-                Image(systemName: "speaker.wave.3.fill")
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
-            }
-
-            AudioOutputPickerView(
-                settings: settings,
-                devices: volume.outputDevices,
-                onSelect: onSelectOutputDevice,
-                onOpenSoundSettings: onOpenSoundSettings,
-                isExpanded: $isOutputExpanded
+        VStack(alignment: .leading, spacing: 8) {
+            VolumeOutputSummaryView(
+                volume: volume,
+                isEnabled: isEnabled,
+                onToggleMute: onToggleMute,
+                onOpenSoundSettings: onOpenSoundSettings
             )
+
+            Slider(
+                value: $draftVolume,
+                in: 0...1,
+                onEditingChanged: handleVolumeEditing
+            )
+            .tint(volume.isMuted ? Color.secondary : Color.accentColor)
+            .disabled(!isEnabled)
+            .accessibilityLabel(localization.string(.volumeAccessibilityLabel))
+            .accessibilityValue(percentageText)
+            .padding(.horizontal, 2)
+            // Only the slider is a scroll target; the output device list
+            // below stays a normal list.
+            .background(VolumeControlScrollTarget(targets: scrollTargets))
+
+            if volume.outputDevices.count > 1 {
+                Divider()
+                    .padding(.top, 2)
+
+                AudioOutputPickerView(
+                    settings: settings,
+                    devices: volume.outputDevices,
+                    onSelect: onSelectOutputDevice,
+                    onOpenSoundSettings: onOpenSoundSettings,
+                    isExpanded: $isOutputExpanded
+                )
+            }
         }
         .onAppear(perform: synchronizeVolume)
         .onChange(of: draftVolume) { _, newValue in
