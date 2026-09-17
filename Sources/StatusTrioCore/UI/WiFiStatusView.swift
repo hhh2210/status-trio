@@ -5,6 +5,7 @@ struct WiFiStatusView: View {
     @EnvironmentObject private var localization: Localization
     let wifi: WiFiStatus
     var connection: NetworkConnection = .wifi
+    var isResolvingName: Bool = false
     let onOpenDetails: (Bool) -> Void
     let onRequestNameAccess: () -> Void
     let onOpenWiFiSettings: () -> Void
@@ -25,7 +26,7 @@ struct WiFiStatusView: View {
                 HStack(spacing: 10) {
                     WiFiStatusIcon(wifi: wifi)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(summarySSID ?? localization.string(.networkTitle))
+                        Text(summarySSID ?? localization.string(.wifiTitle))
                             .font(.headline)
                             .lineLimit(1)
                             .truncationMode(.tail)
@@ -68,6 +69,12 @@ struct WiFiStatusView: View {
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
                 .truncationMode(.tail)
+        } else if isResolvingName {
+            // The fresh name is still being read: keep the line empty instead of
+            // flashing the generic state, and keep its height so the row does not jump.
+            Text(verbatim: " ")
+                .font(.caption)
+                .accessibilityHidden(true)
         } else if wifi.state.isNetworkAssociated && wifi.nameAccess == .notDetermined {
             Button(localization.string(.wifiActionRequestNameAccess), action: onRequestNameAccess)
                 .buttonStyle(.plain)
@@ -98,6 +105,6 @@ struct WiFiStatusView: View {
         if let ssid = wifi.ssid, !ssid.isEmpty {
             return localization.format(.wifiAccessibilityWithSSID, ssid, StatusPresentation.wifiValue(wifi, localization: localization))
         }
-        return localization.format(.commonLabelValue, localization.string(.networkTitle), StatusPresentation.wifiValue(wifi, localization: localization))
+        return localization.format(.commonLabelValue, localization.string(.wifiTitle), StatusPresentation.wifiValue(wifi, localization: localization))
     }
 }

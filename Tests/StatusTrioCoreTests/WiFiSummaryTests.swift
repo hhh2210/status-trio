@@ -55,6 +55,43 @@ final class WiFiSummaryTests: XCTestCase {
         XCTAssertEqual(WiFiSummaryPresentation.measurements(hotspot, connection: .wifi, localization: localization), "5 GHz · -58 dBm")
     }
 
+    func testSummaryWaitsForFreshAuthorizedNameBeforePublishingMeasurements() {
+        let name = "WiFiSummaryTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: name)!
+        defer { defaults.removePersistentDomain(forName: name) }
+        let localization = Localization(defaults: defaults, preferredLanguages: ["en"])
+        let awaitingName = WiFiStatus(
+            state: .connected,
+            rssi: -58,
+            ssid: nil,
+            nameAccess: .authorized,
+            band: .fiveGHz
+        )
+
+        XCTAssertTrue(awaitingName.isAwaitingName)
+        XCTAssertNil(WiFiSummaryPresentation.summarySSID(awaitingName, connection: .wifi))
+        XCTAssertNil(WiFiSummaryPresentation.measurements(
+            awaitingName,
+            connection: .wifi,
+            localization: localization
+        ))
+
+        let freshReading = WiFiStatus(
+            state: .connected,
+            rssi: -58,
+            ssid: "Example Network",
+            nameAccess: .authorized,
+            band: .fiveGHz
+        )
+        XCTAssertFalse(freshReading.isAwaitingName)
+        XCTAssertEqual(WiFiSummaryPresentation.summarySSID(freshReading, connection: .wifi), "Example Network")
+        XCTAssertEqual(WiFiSummaryPresentation.measurements(
+            freshReading,
+            connection: .wifi,
+            localization: localization
+        ), "5 GHz · -58 dBm")
+    }
+
     func testBandChangesDoNotInvalidateEitherIconOrItsSubscription() {
         func snapshot(_ band: WiFiFrequencyBand?) -> StatusSnapshot {
             StatusSnapshot(battery: .placeholder,
