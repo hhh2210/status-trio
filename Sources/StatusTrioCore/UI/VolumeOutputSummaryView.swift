@@ -54,7 +54,7 @@ struct VolumeOutputSummaryView: View {
                 Text(volume.isMuted
                      ? localization.string(.volumeMuted)
                      : StatusPresentation.volumeTitle(volume, localization: localization))
-                    .font(.subheadline)
+                    .font(.caption)
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
             }

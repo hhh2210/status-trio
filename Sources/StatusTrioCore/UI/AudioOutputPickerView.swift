@@ -5,20 +5,19 @@ struct AudioOutputPickerView: View {
     @ObservedObject var settings: SettingsStore
     let devices: [AudioOutputDevice]
     let onSelect: (AudioOutputDevice) -> Void
-    let onOpenSoundSettings: () -> Void
     @Binding var isExpanded: Bool
 
     var body: some View {
         if settings.alwaysShowsAllOutputDevices {
             AudioOutputPickerContent(
                 settings: settings, devices: devices,
-                onSelect: onSelect, onOpenSoundSettings: onOpenSoundSettings
+                onSelect: onSelect
             )
         } else {
             DisclosureGroup(isExpanded: $isExpanded) {
                 AudioOutputPickerContent(
                     settings: settings, devices: devices,
-                    onSelect: onSelect, onOpenSoundSettings: onOpenSoundSettings
+                    onSelect: onSelect
                 )
                 .padding(.top, 4)
             } label: {
@@ -31,19 +30,11 @@ struct AudioOutputPickerView: View {
 }
 
 private struct AudioOutputPickerContent: View {
-    @EnvironmentObject private var localization: Localization
     @ObservedObject var settings: SettingsStore
     let devices: [AudioOutputDevice]
     let onSelect: (AudioOutputDevice) -> Void
-    let onOpenSoundSettings: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            OutputDeviceList(settings: settings, devices: devices, onSelect: onSelect)
-
-            Button(localization.string(.volumeActionOpenSettings), action: onOpenSoundSettings)
-                .font(.callout)
-                .padding(.vertical, 4)
-        }
+        OutputDeviceList(settings: settings, devices: devices, onSelect: onSelect)
     }
 }

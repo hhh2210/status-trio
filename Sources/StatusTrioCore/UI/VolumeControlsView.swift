@@ -68,7 +68,6 @@ struct VolumeControlsView: View {
                     settings: settings,
                     devices: volume.outputDevices,
                     onSelect: onSelectOutputDevice,
-                    onOpenSoundSettings: onOpenSoundSettings,
                     isExpanded: $isOutputExpanded
                 )
             }
